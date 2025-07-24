@@ -1,10 +1,14 @@
-import { reportCss } from './report.css';
+import { FinalReport } from "../services/inputParser";
+import { reportCss } from "./report.css";
 
-export function getDailyReportHtml(data: any, chartImage: string): string {
-  const { metadados, resumo_executivo, rankings, conversas_destaque } = data;
+export function getDailyReportHtml(
+  data: FinalReport & { metadata: { reportDate: string; type: string } },
+  chartImage: string
+): string {
+  const { metadata, rankings, resumoExecutivo, conversasDestaque } = data;
 
   const formatDate = (dateString: string) => {
-    const [year, month, day] = dateString.split('-');
+    const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
   };
 
@@ -20,22 +24,22 @@ export function getDailyReportHtml(data: any, chartImage: string): string {
       <div class="container">
         <div class="header">
           <h1>Relatório Diário de Atendimento</h1>
-          <p>Dados de: ${formatDate(metadados.data_relatorio)}</p>
+          <p>Dados de: ${formatDate(metadata.reportDate)}</p>
         </div>
 
         <h2>📊 Resumo Executivo</h2>
         <div class="summary-grid">
           <div class="metric-card">
             <h3>Nota Média</h3>
-            <p>${resumo_executivo.nota_media}</p>
+            <p>${resumoExecutivo.notaMedia}</p>
           </div>
           <div class="metric-card">
             <h3>Conversas</h3>
-            <p>${resumo_executivo.total_conversas}</p>
+            <p>${resumoExecutivo.totalConversas}</p>
           </div>
           <div class="metric-card">
             <h3>Tempo Médio</h3>
-            <p>${resumo_executivo.tempo_medio_resposta}</p>
+            <p>${resumoExecutivo.tempoMedioResposta}</p>
           </div>
         </div>
 
@@ -45,30 +49,43 @@ export function getDailyReportHtml(data: any, chartImage: string): string {
         </div>
         
         <h2>🚨 Atenção Necessária</h2>
-        ${rankings.atencao_necessaria.length > 0
-          ? `<table>
+        ${
+          rankings.atencaoNecessaria.length > 0
+            ? `<table>
               <tr><th>Funcionário</th><th>Nota Média</th></tr>
-              ${rankings.atencao_necessaria.map((f: any) => `
-                <tr><td class="danger">${f.nome}</td><td class="danger">${f.nota_media}</td></tr>
-              `).join('')}
+              ${rankings.atencaoNecessaria
+                .map(
+                  (f) => `
+                <tr><td class="danger">${f.nome}</td><td class="danger">${f.notaMedia}</td></tr>
+              `
+                )
+                .join("")}
             </table>`
-          : '<p>Nenhum funcionário com nota abaixo de 7.0 hoje!</p>'
+            : "<p>Nenhum funcionário com nota abaixo de 7.0 hoje!</p>"
         }
         
         <h2>⭐ Melhores Conversas (Top 5)</h2>
         <table>
           <tr><th>Funcionário</th><th>Cliente</th><th>Nota</th></tr>
-          ${conversas_destaque.melhores.map((c: any) => `
-            <tr><td>${c.employee_name}</td><td>${c.customer_name}</td><td>${c.nota_final}</td></tr>
-          `).join('')}
+          ${conversasDestaque.melhores
+            .map(
+              (c) => `
+            <tr><td>${"N/A"}</td><td>${"N/A"}</td><td>${"N/A"}</td></tr>
+          `
+            )
+            .join("")}
         </table>
 
         <h2>⚠️ Piores Conversas (Top 5)</h2>
         <table>
           <tr><th>Funcionário</th><th>Cliente</th><th>Nota</th></tr>
-          ${conversas_destaque.piores.map((c: any) => `
-            <tr><td>${c.employee_name}</td><td>${c.customer_name}</td><td>${c.nota_final}</td></tr>
-          `).join('')}
+          ${conversasDestaque.piores
+            .map(
+              (c: any) => `
+            <tr><td>${"N/A"}</td><td>${"N/A"}</td><td>${"N/A"}</td></tr>
+          `
+            )
+            .join("")}
         </table>
         
         <div class="footer">

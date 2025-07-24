@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Relatório Diário - Tallos</title>
+      <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>Relatório Diário de Atendimento</h1>
+          <p>Dados de: ${formatDate(metadados.data_relatorio)}</p>
+        </div>
+
+        <h2>📊 Resumo Executivo</h2>
+        <div class="summary-grid">
+          <div class="metric-card">
+            <h3>Nota Média</h3>
+            <p>${resumo_executivo.nota_media}</p>
+          </div>
+          <div class="metric-card">
+            <h3>Conversas</h3>
+            <p>${resumo_executivo.total_conversas}</p>
+          </div>
+          <div class="metric-card">
+            <h3>Tempo Médio</h3>
+            <p>${resumo_executivo.tempo_medio_resposta}</p>
+          </div>
+        </div>
+
+        <h2>👥 Top Funcionários</h2>
+        <div class="chart-container">
+            <img src="${chartImage}" alt="Gráfico de Top Funcionários" />
+        </div>
+        
+        <h2>🚨 Atenção Necessária</h2>
+        ${rankings.atencao_necessaria.length > 0
+          ? `<table>
+              <tr><th>Funcionário</th><th>Nota Média</th></tr>
+              ${rankings.atencao_necessaria.map((f: any) => `
+                <tr><td class="danger">${f.nome}</td><td class="danger">${f.nota_media}</td></tr>
+              `).join('')}
+            </table>`
+          : '<p>Nenhum funcionário com nota abaixo de 7.0 hoje!</p>'
+        }
+        
+        <h2>⭐ Melhores Conversas (Top 5)</h2>
+        <table>
+          <tr><th>Funcionário</th><th>Cliente</th><th>Nota</th></tr>
+          ${conversas_destaque.melhores.map((c: any) => `
+            <tr><td>${c.employee_name}</td><td>${c.customer_name}</td><td>${c.nota_final}</td></tr>
+          `).join('')}
+        </table>
+
+        <h2>⚠️ Piores Conversas (Top 5)</h2>
+        <table>
+          <tr><th>Funcionário</th><th>Cliente</th><th>Nota</th></tr>
+          ${conversas_destaque.piores.map((c: any) => `
+            <tr><td>${c.employee_name}</td><td>${c.customer_name}</td><td>${c.nota_final}</td></tr>
+          `).join('')}
+        </table>
+        
+        <div class="footer">
+          <p>Relatório gerado automaticamente pelo Sistema.</p>
+        </div>
+      </div>
+    </body>
+    </html>

@@ -1,13 +1,16 @@
-import { generateBarChart } from './chartGenerator';
-import { getDailyReportHtml } from '../templates/dailyReportTemplate';
-import { generatePdfFromHtml } from './pdfGenerator';
+import { getDailyReportHtml } from "../templates/dailyReportTemplate";
+import { generateBarChart } from "./chartGenerator";
+import { FinalReport } from "./inputParser";
+import { generatePdfFromHtml } from "./pdfGenerator";
 
-export async function createDailyReport(reportData: any) {
-  console.log(reportData)
-  const topFuncionariosData = reportData.rankings.top_funcionarios.map((f: any) => ({
+export async function createDailyReport(
+  reportData: FinalReport & { metadata: { reportDate: string; type: string } }
+) {
+  const topFuncionariosData = reportData.rankings.topFuncionarios.map((f) => ({
     label: f.nome,
-    value: f.nota_media
+    value: f.notaMedia,
   }));
+
   const barChartImage = await generateBarChart(topFuncionariosData);
 
   const html = getDailyReportHtml(reportData, barChartImage);
