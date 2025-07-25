@@ -1,3 +1,5 @@
+export const reportCss = `
+<style>
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -93,3 +95,5 @@ th {
   font-size: 0.8em;
   color: #888;
 }
+</style>
+`;

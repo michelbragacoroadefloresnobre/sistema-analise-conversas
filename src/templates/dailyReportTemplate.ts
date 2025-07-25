@@ -1,4 +1,19 @@
-<!DOCTYPE html>
+import { FinalReport } from "../services/inputParser";
+import { reportCss } from "./report.css";
+
+export function getDailyReportHtml(
+  data: FinalReport & { metadata: { reportDate: string; type: string } },
+  chartImage: string
+): string {
+  const { metadata, rankings, resumoExecutivo, conversasDestaque } = data;
+
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
+  return `
+    <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -35,22 +50,28 @@
       </div>
 
       <h2>🚨 Atenção Necessária</h2>
-      ${ rankings.atencaoNecessaria.length > 0 ? `
+      ${
+        rankings.atencaoNecessaria.length > 0
+          ? `
       <table>
         <tr>
           <th>Funcionário</th>
           <th>Nota Média</th>
         </tr>
-        ${rankings.atencaoNecessaria .map( (f) => `
+        ${rankings.atencaoNecessaria
+          .map(
+            (f) => `
         <tr>
           <td class="danger">${f.nome}</td>
           <td class="danger">${f.notaMedia}</td>
         </tr>
-        ` ) .join("")}
+        `
+          )
+          .join("")}
       </table>
-      ` : "
-      <p>Nenhum funcionário com nota abaixo de 7.0 hoje!</p>
-      " }
+      `
+          : "<p>Nenhum funcionário com nota abaixo de 7.0 hoje!</p>"
+      }
 
       <h2>⭐ Melhores Conversas (Top 5)</h2>
       <table>
@@ -59,13 +80,17 @@
           <th>Cliente</th>
           <th>Nota</th>
         </tr>
-        ${conversasDestaque.melhores .map( (c) => `
+        ${conversasDestaque.melhores
+          .map(
+            (c) => `
         <tr>
           <td>${c.employeeName}</td>
           <td>${c.customerName}</td>
-          <td>${ c!.ai!.notaVenda }</td>
+          <td>${c!.ai!.notaVenda}</td>
         </tr>
-        ` ) .join("")}
+        `
+          )
+          .join("")}
       </table>
 
       <h2>⚠️ Piores Conversas (Top 5)</h2>
@@ -76,7 +101,9 @@
           <th>Nota</th>
           <th>Ações</th>
         </tr>
-        ${conversasDestaque.piores .map( (c: any) => `
+        ${conversasDestaque.piores
+          .map(
+            (c: any) => `
         <tr>
           <td>${c.employeeName}</td>
           <td>${c.customerName}</td>
@@ -84,7 +111,7 @@
           <td>
             <a
               class="details-button"
-              href="${process.env.WEBSITE_URL + '/conversations/' + c.id}"
+              href="${process.env.WEBSITE_URL + "/conversations/" + c.id}"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +136,9 @@
             </a>
           </td>
         </tr>
-        ` ) .join("")}
+        `
+          )
+          .join("")}
       </table>
 
       <div class="footer">
@@ -118,3 +147,5 @@
     </div>
   </body>
 </html>
+  `;
+}

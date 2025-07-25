@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  // PostgreSQL é recomendado pelo suporte nativo a arrays (String[]).
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- ENUMS: Para garantir a consistência dos dados ---
+
+enum ContextoIdentificado {
+  telefone
+  hibrido
+  whatsApp
+  nao_aplicavel
+}
+
+enum Classificacao {
+  excelente
+  bom
+  regular
+  fraco
+  nao_aplicavel
+}
+
+model Report {
+  id            Int                    @id @default(autoincrement())
+  reportDate    String
+  type          String // Ex: "daily"
+  conversations ConversationAnalysis[]
+  createdAt     DateTime               @default(now())
+}
+
+model ConversationAnalysis {
+  id           Int    @id @default(autoincrement())
+  customerId   String
+  customerName String
+  employeeName String
+  protocol     String
+
+  ai AiAnalysis?
+
+  reportId Int
+  report   Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+}
+
+model AiAnalysis {
+  id                    Int                  @id @default(autoincrement())
+  contextoIdentificado  ContextoIdentificado
+  notaVenda             Int
+  notaPosVenda          Int
+  justificativaVenda    String               @db.Text
+  justificativaPosVenda String               @db.Text
+  sensacaoCliente       String               @db.Text
+
+  oportunidadesNaoAproveitadas String[]
+
+  resumoExecutivo ResumoExecutivo?
+
+  conversationAnalysisId Int                  @unique
+  conversationAnalysis   ConversationAnalysis @relation(fields: [conversationAnalysisId], references: [id], onDelete: Cascade)
+}
+
+model ResumoExecutivo {
+  id              Int           @id @default(autoincrement())
+  tipoAtendimento String
+  pontoAlto       String        @db.Text
+  oportunidade    String        @db.Text
+  classificacao   Classificacao
+
+  aiAnalysisId Int        @unique
+  aiAnalysis   AiAnalysis @relation(fields: [aiAnalysisId], references: [id], onDelete: Cascade)
+}

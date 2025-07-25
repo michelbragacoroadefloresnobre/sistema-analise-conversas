@@ -1,16 +1,10 @@
-import { AnaliseAI, DadosAtendimento } from "../types";
+import { ConversationAnalysis } from "../types/prisma-types";
 
-export function inputParser(input: DadosAtendimento[]) {
-  const relevantConversations = input.filter(
-    (r) =>
-      r.status === "analisado" &&
-      r.ai.resumoExecutivo.tipoAtendimento !== "telefone"
-  );
+export function inputParser(conversations: ConversationAnalysis[]) {
+  const aiAnalyse = conversations.map((c) => c.ai);
 
-  const aiAnalyse = relevantConversations.map((c) => c.ai);
-
-  const totalConversations = relevantConversations.length;
-  const finalScore = aiAnalyse.map((c) => c.notaVenda);
+  const totalConversations = conversations.length;
+  const finalScore = aiAnalyse.map((c) => c!.notaVenda);
 
   const averageScore =
     finalScore.length > 0
@@ -25,7 +19,7 @@ export function inputParser(input: DadosAtendimento[]) {
     { totalScore: number; count: number }
   >();
 
-  relevantConversations.forEach((convo) => {
+  conversations.forEach((convo) => {
     // Trata casos de múltiplos atendentes na mesma conversa (ex: "Nome1 + Nome2")
     const attendants = convo.employeeName.split(" + ");
     attendants.forEach((name) => {
@@ -34,7 +28,7 @@ export function inputParser(input: DadosAtendimento[]) {
         totalScore: 0,
         count: 0,
       };
-      stats.totalScore += convo.ai.notaVenda;
+      stats.totalScore += convo!.ai!.notaVenda;
       stats.count += 1;
       attendantStatsMap.set(trimmedName, stats);
     });
@@ -53,8 +47,8 @@ export function inputParser(input: DadosAtendimento[]) {
   const bestAttendants = rankedAttendants.slice(0, 3);
   const worstAttendants = [...rankedAttendants].reverse().slice(0, 3);
 
-  const rankedConversations = relevantConversations.sort(
-    (a, b) => b.ai.notaVenda - a.ai.notaVenda
+  const rankedConversations = conversations.sort(
+    (a, b) => b!.ai!.notaVenda - a!.ai!.notaVenda
   );
 
   const bestConversations = rankedConversations.slice(0, 5);
