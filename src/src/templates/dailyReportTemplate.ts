@@ -70,7 +70,7 @@ export function getDailyReportHtml(
           ${conversasDestaque.melhores
             .map(
               (c) => `
-            <tr><td>${"N/A"}</td><td>${"N/A"}</td><td>${"N/A"}</td></tr>
+            <tr><td>${c.employeeName}</td><td>${c.customerName}</td><td>${c.ai.notaVenda}</td></tr>
           `
             )
             .join("")}
@@ -82,7 +82,7 @@ export function getDailyReportHtml(
           ${conversasDestaque.piores
             .map(
               (c: any) => `
-            <tr><td>${"N/A"}</td><td>${"N/A"}</td><td>${"N/A"}</td></tr>
+            <tr><td>${c.employeeName}</td><td>${c.customerName}</td><td>${c.ai.notaVenda}</td></tr>
           `
             )
             .join("")}

@@ -1,16 +1,17 @@
-import { AIsAnalyse } from "../types/IAsAnalyse";
+import { AnaliseAI, DadosAtendimento } from "../types";
 
-export function inputParser(input: AIsAnalyse[]) {
-  const analysed = input.filter(
+export function inputParser(input: DadosAtendimento[]) {
+  const relevantConversations = input.filter(
     (r) =>
       r.status === "analisado" &&
-      r.resumoExecutivo.tipoAtendimento !== "Telefone"
+      r.ai.resumoExecutivo.tipoAtendimento !== "telefone"
   );
 
-  const date = new Date().toISOString().split("T")[0];
+  const aiAnalyse = relevantConversations.map((c) => c.ai);
 
-  const totalConversations = analysed.length;
-  const finalScore = analysed.map((c) => c.notaFinal);
+  const totalConversations = relevantConversations.length;
+  const finalScore = aiAnalyse.map((c) => c.notaVenda);
+
   const averageScore =
     finalScore.length > 0
       ? (finalScore.reduce((a, b) => a + b, 0) / finalScore.length).toFixed(1)
@@ -19,13 +20,45 @@ export function inputParser(input: AIsAnalyse[]) {
   const averageTimeToRespond = "N/A";
   const resolutionTax = "N/A";
 
-  const bestConversations = analysed
-    .sort((a, b) => b.notaFinal - a.notaFinal)
-    .slice(0, 5);
+  const attendantStatsMap = new Map<
+    string,
+    { totalScore: number; count: number }
+  >();
 
-  const poorConversations = analysed
-    .sort((a, b) => b.notaFinal - a.notaFinal)
-    .slice(0, 5);
+  relevantConversations.forEach((convo) => {
+    // Trata casos de múltiplos atendentes na mesma conversa (ex: "Nome1 + Nome2")
+    const attendants = convo.employeeName.split(" + ");
+    attendants.forEach((name) => {
+      const trimmedName = name.trim();
+      const stats = attendantStatsMap.get(trimmedName) ?? {
+        totalScore: 0,
+        count: 0,
+      };
+      stats.totalScore += convo.ai.notaVenda;
+      stats.count += 1;
+      attendantStatsMap.set(trimmedName, stats);
+    });
+  });
+
+  const rankedAttendants = Array.from(attendantStatsMap.entries()).map(
+    ([name, stats]) => ({
+      nome: name,
+      notaMedia: stats.totalScore / stats.count,
+    })
+  );
+
+  // 3. Classificar Atendentes
+  rankedAttendants.sort((a, b) => b.notaMedia - a.notaMedia);
+
+  const bestAttendants = rankedAttendants.slice(0, 3);
+  const worstAttendants = [...rankedAttendants].reverse().slice(0, 3);
+
+  const rankedConversations = relevantConversations.sort(
+    (a, b) => b.ai.notaVenda - a.ai.notaVenda
+  );
+
+  const bestConversations = rankedConversations.slice(0, 5);
+  const worstConversations = rankedConversations.reverse().slice(0, 5);
 
   const finalReport = {
     resumoExecutivo: {
@@ -36,12 +69,12 @@ export function inputParser(input: AIsAnalyse[]) {
       comparativoDiaAnterior: "N/A", // Exemplo
     },
     rankings: {
-      topFuncionarios: [{ nome: "N/A", notaMedia: 0 }],
-      atencaoNecessaria: [{ nome: "N/A", notaMedia: 0 }],
+      topFuncionarios: bestAttendants,
+      atencaoNecessaria: worstAttendants,
     },
     conversasDestaque: {
       melhores: bestConversations,
-      piores: poorConversations,
+      piores: worstConversations,
     },
   };
 

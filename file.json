@@ -1,0 +1,247 @@
+[
+  {
+    "reportDate": "2025-07-20",
+    "data": [
+      {
+        "customerId": "687072b298ac2c0013c1d134",
+        "customerName": "Fernanda",
+        "employeeName": "Vinícius Torres",
+        "protocol": "2025071152970",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "telefone",
+          "notaVenda": 0,
+          "justificativaVenda": "O atendimento foi informativo, com troca de mensagens que confirmaram detalhes sobre a entrega e a solicitação de uma coroa de flores, mas não houve coleta de informações mais profundas ou apresentação de proposta. A conversação parece ter sido motivada por uma abordagem inicial feita por telefone.",
+          "notaPosVenda": 0,
+          "justificativaPosVenda": "Não houve follow-up ou qualquer abordagem pós-venda visível no histórico apresentado. O cliente não foi informado sobre o processo de entrega de maneira mais abrangente.",
+          "oportunidadesNaoAproveitadas": [],
+          "sensacaoCliente": "O cliente pode ter se sentido atendido, mas sem um suporte emocional ou um acompanhamento mais próximo.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "telefone",
+            "pontoAlto": "Confirmação de entrega e disponibilidade da coroa de flores.",
+            "oportunidade": "Melhorar o acompanhamento e coleta de informações detalhadas.",
+            "classificacao": "fraco"
+          }
+        }
+      },
+      {
+        "customerId": "6870729a5e8dde00133edefd",
+        "customerName": "DEUS ACIMA DE TUDO",
+        "employeeName": "Lucas Rodrigues",
+        "protocol": "2025071115124",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "whatsApp",
+          "notaVenda": 5,
+          "justificativaVenda": "O atendente Lucas Rodrigues mostrou empatia ao expressar condolências e tentou ajudar o cliente com alternativas. No entanto, a negociação não foi eficaz, pois o cliente estava em busca de um preço mais baixo e mencionou uma oferta melhor no site, o que sugere que a proposta não foi convincente. O atendente deveria ter demonstrado mais evidência de informação sobre a variação de preços e alternativas que pudessem atender melhor o cliente. Faltou uma confirmação clara ou fechamento efetivo.",
+          "notaPosVenda": 5,
+          "justificativaPosVenda": "Não houve follow-up após a proposta inicial, nem confirmação sobre o que foi discutido. O atendente demonstrou apoio emocional e sensibilidade, mas não houve clareza nos próximos passos ou na manutenção do relacionamento com o cliente.",
+          "oportunidadesNaoAproveitadas": [
+            "Não ofereceu upgrade (rosas, tamanho G, faixa extra, etc)",
+            "Não personalizou proposta com base no perfil do cliente",
+            "Não enviou link de avaliação no encerramento"
+          ],
+          "sensacaoCliente": "O cliente pode ter se sentido frustrado com a falta de alternativas viáveis que se encaixassem no seu orçamento, mas apreciou a empatia demonstrada pelo atendente.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "whatsApp",
+            "pontoAlto": "A empatia demonstrada no início da conversa foi um ponto forte.",
+            "oportunidade": "Aumentar a personalização e opções na proposta inicial para melhor atender o cliente.",
+            "classificacao": "regular"
+          }
+        }
+      },
+      {
+        "customerId": "68704089561d3a0013c72c0e",
+        "customerName": "Miquéias",
+        "employeeName": "Lucas Rodrigues + Vinícius Torres",
+        "protocol": "2025071130103, 2025071169756, 2025071053478",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "telefone",
+          "notaVenda": 0,
+          "justificativaVenda": "O atendimento foi realizado por telefone e o WhatsApp foi utilizado apenas para confirmação de detalhes, sem negociação ou coleta de informações visíveis no histórico. Portanto, não foi possível avaliar a condução de venda através da conversa.",
+          "notaPosVenda": 0,
+          "justificativaPosVenda": "Não houve elementos de pós-venda visíveis no trecho disponível que pudessem ser avaliados.",
+          "oportunidadesNaoAproveitadas": [],
+          "sensacaoCliente": "O cliente pode ter se sentido satisfeito com os detalhes confirmados, mas a análise não revela a profundidade do atendimento.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "telefone",
+            "pontoAlto": "Confirmação do atendimento em um momento delicado.",
+            "oportunidade": "Embora a confirmação tenha sido feita, não há detalhes que permitam avaliar a experiência completa do cliente.",
+            "classificacao": "não aplicável"
+          }
+        }
+      },
+      {
+        "customerId": "6870368f85c2570013276a79",
+        "customerName": "Tati Chris 💖",
+        "employeeName": "Lucas Rodrigues + Camila Souza",
+        "protocol": "2025071186709, 2025071015352, 2025071072593",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "hibrido",
+          "notaVenda": 0,
+          "justificativaVenda": "A troca de mensagens no WhatsApp foi muito limitada e não incluiu etapas críticas da venda, como a apresentação de proposta ou fechamento. Embora algumas informações tenham sido coletadas, não há dados suficientes para avaliar adequadamente a abordagem e proposta de valor do atendente.",
+          "notaPosVenda": 0,
+          "justificativaPosVenda": "A conversa contém alguns elementos de pós-venda, como o envio de informações sobre a entrega da coroa e a oferta de fotos, mas como não há um fechamento claro de venda anterior, não é possível avaliar eficazmente esta etapa.",
+          "oportunidadesNaoAproveitadas": [],
+          "sensacaoCliente": "O cliente pode ter se sentido confuso devido à falta de informações claras e detalhadas na troca.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "hibrido",
+            "pontoAlto": "O atendente perguntou pelo nome do homenageado e confirmou a produção da coroa.",
+            "oportunidade": "O atendente poderia ter conduzido uma conversa mais completa, oferecendo mais informações e opções para o cliente.",
+            "classificacao": "fraco"
+          }
+        }
+      },
+      {
+        "customerId": "6870203e6d896c0013b21269",
+        "customerName": "conexlogadm",
+        "employeeName": "Lucas Rodrigues + Erika Silva",
+        "protocol": "2025071172340, 2025071182380, 2025071145632, 2025071086620, 2025071094802, 2025071092410",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "telefone",
+          "notaVenda": 0,
+          "justificativaVenda": "O atendimento realizado foi puramente informativo, com o WhatsApp utilizado apenas para a troca de dados necessários após uma venda que ocorreu por telefone. Não houve interação de venda ou coleta de informações vinculadas diretamente ao produto ou à negociação; portanto, não há elementos para avaliar.",
+          "notaPosVenda": 0,
+          "justificativaPosVenda": "Não há informações suficientes para avaliar a etapa de pós-venda, uma vez que a conversa se limitou a questões administrativas e confirmações via WhatsApp.",
+          "oportunidadesNaoAproveitadas": [],
+          "sensacaoCliente": "O cliente provavelmente se sentiu sem referência de atendimento, já que a comunicação foi meramente administrativa.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "telefone",
+            "pontoAlto": "O cliente conseguiu enviar informações necessárias para finalizar o processo.",
+            "oportunidade": "Faltou uma abordagem de venda mais clara no WhatsApp ou um acompanhamento mais próximo.",
+            "classificacao": "fraco"
+          }
+        }
+      },
+      {
+        "customerId": "68706409c265880013a24120",
+        "customerName": "Lima",
+        "employeeName": "Vinícius Torres",
+        "protocol": "2025071158466",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "hibrido",
+          "notaVenda": 6,
+          "justificativaVenda": "O atendente cumpriu os critérios obrigatórios ao iniciar a conversa de forma acolhedora, questionando sobre o nome do homenageado e informações adicionais necessárias para a confecção da coroa. No entanto, poderia ter demonstrado mais empatia na abordagem inicial e ter oferecido opções de personalização com mais clareza. A proposta de valor não foi devidamente destacada, e não foram feitos upgrades ou sugestões de valorização do produto. A formalização do pedido no WhatsApp teve elementos essenciais, como a solicitação do CPF, mas a urgência na entrega não foi bem enfatizada até a última parte da conversa.",
+          "notaPos Venda": 7,
+          "justificativaPosVenda": "O atendente fez uma boa gestão sobre os prazos e necessidades do cliente, mantendo uma comunicação clara sobre a entrega e requisitando informações essenciais. Não houve um follow-up visível, mas as respostas foram rápidas e ajudaram a manter o cliente informado. Em termos emocionais, o atendente deveria ter demonstrado mais sensibilidade ao tratar de um assunto tão delicado. Contudo, abriu espaço para futura interação.",
+          "oportunidadesNaoAproveitadas": [
+            "Não ofereceu upgrade (rosas, tamanho G, faixa extra, etc)",
+            "Não personalizou proposta com base no perfil do cliente",
+            "Não sugeriu envio da foto da coroa",
+            "Não enviou link de avaliação no encerramento"
+          ],
+          "sensacaoCliente": "O cliente provavelmente se sentiu satisfeito com a agilidade do atendimento, mas poderia ter desejado uma experiência mais emotiva e personalizada considerando a situação delicada.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "hibrido",
+            "pontoAlto": "Atendimento claro e objetivo nas informações solicitadas e resposta rápida.",
+            "oportunidade": "Melhorar a abordagem emocional e oferecer opções de personalização e upgrades.",
+            "classificacao": "bom"
+          }
+        }
+      },
+      {
+        "customerId": "687060e2af961a0013759f14",
+        "customerName": "Cristiane",
+        "employeeName": "Vinícius Torres",
+        "protocol": "2025071153103",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "whatsApp",
+          "notaVenda": 7,
+          "justificativaVenda": "O atendente, Vinícius, foi acolhedor e direto em sua abordagem inicial, fazendo uso de uma linguagem humana e respeitosa. Ele coletou as informações necessárias do velório de forma clara, mas não explorou oportunidades de upgrades ou personalização na proposta. A proposta foi apresentada de forma objetiva, e o fechamento foi feito com as informações de pagamento. Contudo, a ausência de um envolvimento emocional mais forte e a falta de micro-compromissos durante a negociação são pontos que poderiam ter sido melhorados.",
+          "notaPosVenda": 8,
+          "justificativaPosVenda": "Na etapa de pós-venda, Vinícius demonstrou proatividade ao informar que enviaria a foto da coroa quando pronta, mostrando cuidado. Ele transmitiu segurança quanto ao andamento do pedido. Porém, faltou um follow-up após o envio do comprovante de pagamento, que poderia reforçar o relacionamento com o cliente. O fechamento do atendimento foi cordial, deixando uma sensação de acolhimento ao cliente, mas poderia ter aberto espaço para comentários ou avaliações futuras.",
+          "oportunidadesNaoAproveitadas": [
+            "Não ofereceu upgrade (rosas, tamanho G, faixa extra, etc)",
+            "Não personalizou proposta com base no perfil do cliente",
+            "Não enviou link de avaliação no encerramento"
+          ],
+          "sensacaoCliente": "O cliente provavelmente se sentiu acolhido e satisfeito com a condução do atendimento, mas talvez quisesse ter recebido mais opções personalizadas.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "whatsApp",
+            "pontoAlto": "Acolhimento e objetividade na coleta de informações.",
+            "oportunidade": "Explorar mais opções de upgrades e personalização na proposta.",
+            "classificacao": "bom"
+          }
+        }
+      },
+      {
+        "customerId": "6855689c9b2f8a0007aba84e",
+        "customerName": "Bell Motta",
+        "employeeName": "Lucas Rodrigues",
+        "protocol": "2025071140620",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "whatsApp",
+          "notaVenda": 0,
+          "justificativaVenda": "O atendimento foi principalmente informativo, com foco em responder perguntas do cliente sobre a entrega e produtos, sem uma abordagem clara de coleta de informações ou proposta de venda.",
+          "notaPosVenda": 0,
+          "justificativaPosVenda": "Não houve follow-up ou confirmação após a conversa, pois o atendimento foi interrompido antes de avançar para um processo de venda ou pós-venda.",
+          "oportunidadesNaoAproveitadas": [
+            "Não ofereceu upgrade (rosas, tamanho G, faixa extra, etc)",
+            "Não demonstrou urgência na entrega",
+            "Não personalizou proposta com base no perfil do cliente",
+            "Não sugeriu envio da foto da coroa",
+            "Não enviou link de avaliação no encerramento"
+          ],
+          "sensacaoCliente": "O cliente pode ter se sentido frustrado pela falta de uma proposta clara e pela ausência de um seguimento ativo durante a conversa.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "whatsApp",
+            "pontoAlto": "O atendente demonstrou disposição para ajudar e esclarecer dúvidas.",
+            "oportunidade": "Falta de uma abordagem mais proativa e estruturada na venda.",
+            "classificacao": "fraco"
+          }
+        }
+      },
+      {
+        "customerId": "687032d917b3550013064b4c",
+        "customerName": "Laurent Zehaniuck",
+        "employeeName": "Vinícius Torres + Lucas Rodrigues",
+        "protocol": "2025071143050, 2025071097040",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "telefone",
+          "notaVenda": 0,
+          "justificativaVenda": "O atendimento foi conduzido inteiramente por telefone, com o WhatsApp sendo utilizado apenas para comunicações informativas. Não houve interação de venda efetiva no WhatsApp.",
+          "notaPosVenda": 0,
+          "justificativaPosVenda": "Como o atendimento foi apenas informativo e não houve interação de pós-venda via WhatsApp, não é possível avaliar esta etapa.",
+          "oportunidadesNaoAproveitadas": [],
+          "sensacaoCliente": "O cliente pode ter se sentido confuso ou insatisfeito, dado que a resposta final foi que a família não se interessava mais.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "telefone",
+            "pontoAlto": "O atendimento foi encerrado de forma educada.",
+            "oportunidade": "Buscar melhor entendimento das necessidades antes de encerrar o atendimento.",
+            "classificacao": "fraco"
+          }
+        }
+      },
+      {
+        "customerId": "68705b7395249a00133385b9",
+        "customerName": "😊",
+        "employeeName": "Lucas Rodrigues",
+        "protocol": "2025071160897",
+        "status": "analisado",
+        "ai": {
+          "contextoIdentificado": "whatsApp",
+          "notaVenda": 0,
+          "justificativaVenda": "O atendimento foi informativo, pois não foram tomadas ações concretas em relação à venda ou coleta de dados relevantes para o pedido de coroa de flores. Faltaram interações que permitissem avaliar a abertura, abordagem, proposta ou fechamento da venda.",
+          "notaPosVenda": 0,
+          "justificativaPosVenda": "Não houve comunicação relacionada ao pós-venda, uma vez que o atendimento não progrediu para uma venda ou interação significativa que pudesse ser avaliada.",
+          "oportunidadesNaoAproveitadas": [],
+          "sensacaoCliente": "O cliente pode ter se sentido frustrado devido à falta de retorno ou clareza no atendimento.",
+          "resumoExecutivo": {
+            "tipoAtendimento": "whatsApp",
+            "pontoAlto": "O cliente iniciou a conversa demonstrando interesse em adquirir um produto.",
+            "oportunidade": "Melhorar a abordagem inicial para encorajar o cliente a fornecer informações e avançar no processo de compra.",
+            "classificacao": "fraco"
+          }
+        }
+      }
+    ],
+    "type": "daily"
+  }
+]
