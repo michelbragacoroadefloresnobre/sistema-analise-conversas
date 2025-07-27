@@ -1,22 +1,21 @@
 import express from "express";
-import multer from "multer";
+import path from "path";
 import { ZodError } from "zod";
 import { db } from "./db";
 import { inputParser } from "./services/inputParser";
 import { createDailyReport } from "./services/reportService";
-import { ReportSchema } from "./validators";
 import { sendReportByEmail } from "./services/sendReportService";
-import { ATTENDANTS_CHART_CID } from "./services/templateGenerator";
+import { ReportSchema } from "./validators";
+import { getView } from "./utils";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const upload = multer();
-
 app.use(express.json({ limit: "50mb" }));
 app.set("view engine", "ejs");
+app.set("views", getView());
 
-app.post("/reports", upload.none(), async (req, res) => {
+app.post("/reports", async (req, res) => {
   try {
     let body = ReportSchema.parse(req.body);
 

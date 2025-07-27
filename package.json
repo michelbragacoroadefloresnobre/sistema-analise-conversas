@@ -8,8 +8,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "postbuild": "cpx \"src/generated/**/*\" dist/generated && cpx \"src/views/**/*.ejs\" dist/views",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",
@@ -17,7 +20,6 @@
     "chartjs-node-canvas": "^5.0.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "multer": "^2.0.2",
     "nodemailer": "^7.0.5",
     "puppeteer": "^24.15.0"
   },
@@ -28,6 +30,8 @@
     "@types/node": "^24.1.0",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^19.1.8",
-    "prisma": "^6.12.0"
+    "cpx": "^1.5.0",
+    "prisma": "^6.12.0",
+    "rimraf": "^6.0.1"
   }
 }

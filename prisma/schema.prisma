@@ -1,18 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  // PostgreSQL é recomendado pelo suporte nativo a arrays (String[]).
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-// --- ENUMS: Para garantir a consistência dos dados ---
 
 enum ContextoIdentificado {
   telefone
@@ -32,7 +26,7 @@ enum Classificacao {
 model Report {
   id            Int                    @id @default(autoincrement())
   reportDate    String
-  type          String // Ex: "daily"
+  type          String
   conversations ConversationAnalysis[]
   createdAt     DateTime               @default(now())
 }
