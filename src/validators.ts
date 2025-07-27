@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Validador para o objeto aninhado 'resumoExecutivo'
 const ResumoExecutivoSchema = z.object({
   tipoAtendimento: z.string({
     required_error: "O campo 'tipoAtendimento' é obrigatório.",
@@ -19,7 +18,6 @@ const ResumoExecutivoSchema = z.object({
   ),
 });
 
-// Validador para o objeto 'ai' que contém a análise da inteligência artificial
 const AiAnalysisSchema = z.object({
   contextoIdentificado: z.enum(
     ["telefone", "hibrido", "whatsApp", "nao_aplicavel"],
@@ -49,20 +47,18 @@ const AiAnalysisSchema = z.object({
   sensacaoCliente: z.string({
     required_error: "O campo 'sensacaoCliente' é obrigatório.",
   }),
-  resumoExecutivo: ResumoExecutivoSchema, // Usando o schema aninhado
+  resumoExecutivo: ResumoExecutivoSchema,
 });
 
-// Validador para cada objeto de conversa dentro do array 'data'
 const ConversationAnalysisSchema = z.object({
   customerId: z.string(),
   customerName: z.string(),
   employeeName: z.string(),
   protocol: z.string(),
   status: z.string(),
-  ai: AiAnalysisSchema, // Usando o schema da análise de IA
+  ai: AiAnalysisSchema,
 });
 
-// Validador para o objeto principal do relatório
 export const ReportSchema = z.object({
   reportDate: z
     .string()
@@ -73,8 +69,7 @@ export const ReportSchema = z.object({
   data: z
     .array(ConversationAnalysisSchema)
     .min(1, "O relatório deve conter pelo menos uma conversa."),
-  type: z.string(),
+  type: z.enum(["daily"]),
 });
 
-// Extrai o tipo TypeScript inferido a partir do schema para ser usado na sua aplicação
 export type ReportPayload = z.infer<typeof ReportSchema>;

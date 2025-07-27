@@ -48,5 +48,5 @@ export async function generateBarChart(
   };
 
   const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration);
-  return `data:image/png;base64,${imageBuffer.toString("base64")}`;
+  return imageBuffer;
 }

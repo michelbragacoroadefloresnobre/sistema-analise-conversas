@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
+    <title>
+      Relatório Diário - <%= formatDate(data.metadata.reportDate) %>
+    </title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        supported-color-schemes: light dark;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body,
+        .body-bg {
+          background-color: #1a1a1a !important;
+        }
+        .container,
+        .card {
+          background-color: #2d2d2d !important;
+          border-color: #444 !important;
+        }
+        .header h1,
+        h2,
+        .metric-card p,
+        .custom-table td,
+        .footer p {
+          color: #ffffff !important;
+        }
+        .header p,
+        .metric-card h3,
+        .custom-table th {
+          color: #a0a0a0 !important;
+        }
+        .custom-table th {
+          background-color: #333333 !important;
+        }
+        .custom-table tr.dark-mode-border {
+          border-bottom-color: #444 !important;
+        }
+      }
+
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        background-color: #f6f9fc;
+        font-family: Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    style="
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: #f6f9fc;
+    "
+    class="body-bg"
+  >
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td
+          bgcolor="#f6f9fc"
+          align="center"
+          style="padding: 20px"
+          class="body-bg"
+        >
+          <table
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            width="100%"
+            style="max-width: 680px"
+          >
+            <tr>
+              <td
+                align="center"
+                style="
+                  background-color: #ffffff;
+                  padding: 30px;
+                  border-radius: 8px 8px 0 0;
+                "
+                class="card"
+              >
+                <h1
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 28px;
+                    color: #2c3e50;
+                    margin: 0;
+                  "
+                >
+                  Relatório Diário de Atendimento
+                </h1>
+                <p
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    color: #7f8c8d;
+                    margin: 5px 0 0;
+                  "
+                >
+                  Dados de: <%= formatDate(data.metadata.reportDate) %>
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                style="background-color: #ffffff; padding: 10px 30px 30px 30px"
+                class="card"
+              >
+                <h2
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 22px;
+                    color: #34495e;
+                    margin: 0 0 20px 0;
+                    border-bottom: 2px solid #ecf0f1;
+                    padding-bottom: 10px;
+                  "
+                >
+                  📊 Resumo Executivo
+                </h2>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td align="center" style="padding: 10px">
+                      <h3
+                        style="
+                          font-family: Arial, sans-serif;
+                          font-size: 14px;
+                          color: #95a5a6;
+                          margin: 0 0 8px 0;
+                          font-weight: bold;
+                          text-transform: uppercase;
+                        "
+                      >
+                        Nota Média
+                      </h3>
+                      <p
+                        style="
+                          font-family: Arial, sans-serif;
+                          font-size: 36px;
+                          color: #3498db;
+                          margin: 0;
+                          font-weight: bold;
+                        "
+                      >
+                        <%= data.resumoExecutivo.notaMedia.toFixed(2) %>
+                      </p>
+                    </td>
+                    <td align="center" style="padding: 10px">
+                      <h3
+                        style="
+                          font-family: Arial, sans-serif;
+                          font-size: 14px;
+                          color: #95a5a6;
+                          margin: 0 0 8px 0;
+                          font-weight: bold;
+                          text-transform: uppercase;
+                        "
+                      >
+                        Conversas
+                      </h3>
+                      <p
+                        style="
+                          font-family: Arial, sans-serif;
+                          font-size: 36px;
+                          color: #3498db;
+                          margin: 0;
+                          font-weight: bold;
+                        "
+                      >
+                        <%= data.resumoExecutivo.totalConversas %>
+                      </p>
+                    </td>
+                    <td align="center" style="padding: 10px">
+                      <h3
+                        style="
+                          font-family: Arial, sans-serif;
+                          font-size: 14px;
+                          color: #95a5a6;
+                          margin: 0 0 8px 0;
+                          font-weight: bold;
+                          text-transform: uppercase;
+                        "
+                      >
+                        Tempo Médio
+                      </h3>
+                      <p
+                        style="
+                          font-family: Arial, sans-serif;
+                          font-size: 36px;
+                          color: #3498db;
+                          margin: 0;
+                          font-weight: bold;
+                        "
+                      >
+                        <%= data.resumoExecutivo.tempoMedioResposta %>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="background-color: #ffffff; padding: 30px" class="card">
+                <h2
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 22px;
+                    color: #34495e;
+                    margin: 0 0 20px 0;
+                    border-bottom: 2px solid #ecf0f1;
+                    padding-bottom: 10px;
+                  "
+                >
+                  👥 Top Funcionários
+                </h2>
+                <img
+                  src="<%= chartImage %>"
+                  alt="Gráfico de Top Funcionários"
+                  width="620"
+                  style="
+                    width: 100%;
+                    max-width: 620px;
+                    height: auto;
+                    display: block;
+                    border-radius: 8px;
+                  "
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <td style="background-color: #ffffff; padding: 30px" class="card">
+                <h2
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 22px;
+                    color: #34495e;
+                    margin: 0 0 20px 0;
+                    border-bottom: 2px solid #ecf0f1;
+                    padding-bottom: 10px;
+                  "
+                >
+                  🚨 Atenção Necessária
+                </h2>
+                <% if (data.rankings.atencaoNecessaria.length > 0) { %>
+                <table border="0" cellpadding="15" cellspacing="0" width="100%">
+                  <thead>
+                    <tr>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Funcionário
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Nota Média
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% data.rankings.atencaoNecessaria.forEach(f => { %>
+                    <tr
+                      class="dark-mode-border"
+                      style="border-bottom: 1px solid #ecf0f1"
+                    >
+                      <td
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #e74c3c;
+                          font-weight: bold;
+                        "
+                      >
+                        <%= f.nome %>
+                      </td>
+                      <td
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #e74c3c;
+                          font-weight: bold;
+                        "
+                      >
+                        <%= f.notaMedia.toFixed(2) %>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+                <% } else { %>
+                <p
+                  style="
+                    font-family: Arial, sans-serif;
+                    color: #34495e;
+                    text-align: center;
+                  "
+                >
+                  Nenhum funcionário com nota abaixo do esperado hoje! 🎉
+                </p>
+                <% } %>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="background-color: #ffffff; padding: 30px" class="card">
+                <h2
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 22px;
+                    color: #34495e;
+                    margin: 0 0 20px 0;
+                    border-bottom: 2px solid #ecf0f1;
+                    padding-bottom: 10px;
+                  "
+                >
+                  ⭐ Melhores Conversas (Top 5)
+                </h2>
+                <table border="0" cellpadding="15" cellspacing="0" width="100%">
+                  <thead>
+                    <tr>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Funcionário
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Cliente
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Nota
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: center;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Ações
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% data.conversasDestaque.melhores.forEach(c => { %>
+                    <tr
+                      class="dark-mode-border"
+                      style="border-bottom: 1px solid #ecf0f1"
+                    >
+                      <td
+                        style="font-family: Arial, sans-serif; color: #34495e"
+                      >
+                        <%= c.employeeName %>
+                      </td>
+                      <td
+                        style="font-family: Arial, sans-serif; color: #34495e"
+                      >
+                        <%= c.customerName %>
+                      </td>
+                      <td
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #27ae60;
+                          font-weight: bold;
+                        "
+                      >
+                        <%= c.ai.notaVenda.toFixed(2) %>
+                      </td>
+                      <td align="center">
+                        <a
+                          href="<%= websiteUrl %>/conversations/<%= c.id %>"
+                          target="_blank"
+                          style="
+                            color: #3498db;
+                            text-decoration: none;
+                            font-weight: bold;
+                          "
+                          >Ver</a
+                        >
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="
+                  background-color: #ffffff;
+                  padding: 30px;
+                  border-radius: 0 0 8px 8px;
+                "
+                class="card"
+              >
+                <h2
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 22px;
+                    color: #34495e;
+                    margin: 0 0 20px 0;
+                    border-bottom: 2px solid #ecf0f1;
+                    padding-bottom: 10px;
+                  "
+                >
+                  ⚠️ Piores Conversas (Top 5)
+                </h2>
+                <table border="0" cellpadding="15" cellspacing="0" width="100%">
+                  <thead>
+                    <tr>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Funcionário
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Cliente
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Nota
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: center;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Ações
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% data.conversasDestaque.piores.forEach(c => { %>
+                    <tr
+                      class="dark-mode-border"
+                      style="border-bottom: 1px solid #ecf0f1"
+                    >
+                      <td
+                        style="font-family: Arial, sans-serif; color: #34495e"
+                      >
+                        <%= c.employeeName %>
+                      </td>
+                      <td
+                        style="font-family: Arial, sans-serif; color: #34495e"
+                      >
+                        <%= c.customerName %>
+                      </td>
+                      <td
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #e74c3c;
+                          font-weight: bold;
+                        "
+                      >
+                        <%= c.ai.notaVenda.toFixed(2) %>
+                      </td>
+                      <td align="center">
+                        <a
+                          href="<%= websiteUrl %>/conversations/<%= c.id %>"
+                          target="_blank"
+                          style="
+                            color: #3498db;
+                            text-decoration: none;
+                            font-weight: bold;
+                          "
+                          >Ver</a
+                        >
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="padding: 20px 0">
+                <p
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                    color: #95a5a6;
+                    margin: 0;
+                  "
+                  class="footer-text"
+                >
+                  Relatório gerado automaticamente pelo Sistema.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

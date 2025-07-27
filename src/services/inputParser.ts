@@ -1,4 +1,14 @@
-import { ConversationAnalysis } from "../types/prisma-types";
+import { Prisma } from "../generated/prisma";
+
+type ConversationAnalysis = Prisma.ConversationAnalysisGetPayload<{
+  include: {
+    ai: {
+      include: {
+        resumoExecutivo: true;
+      };
+    };
+  };
+}>;
 
 export function inputParser(conversations: ConversationAnalysis[]) {
   const aiAnalyse = conversations.map((c) => c.ai);

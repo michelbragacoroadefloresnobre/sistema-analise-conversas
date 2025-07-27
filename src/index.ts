@@ -1,26 +1,37 @@
 import express from "express";
 import multer from "multer";
+import { ZodError } from "zod";
 import { db } from "./db";
 import { inputParser } from "./services/inputParser";
 import { createDailyReport } from "./services/reportService";
 import { ReportSchema } from "./validators";
+import { sendReportByEmail } from "./services/sendReportService";
+import { ATTENDANTS_CHART_CID } from "./services/templateGenerator";
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 const upload = multer();
 
 app.use(express.json({ limit: "50mb" }));
+app.set("view engine", "ejs");
 
-app.post("/generate-report", upload.none(), async (req, res) => {
+app.post("/reports", upload.none(), async (req, res) => {
   try {
-    const body = ReportSchema.parse(req.body);
-
-    console.log("Recebida requisição pra gerar relatorio");
+    let body = ReportSchema.parse(req.body);
 
     if (!body) {
       return res.status(400).send({ error: "Dados do relatorio inválidos" });
     }
-    console.log("Salvando no banco de dados...");
+
+    body = {
+      ...body,
+      data: body.data.filter(
+        (r) =>
+          r.status === "analisado" &&
+          r.ai.resumoExecutivo.tipoAtendimento !== "telefone"
+      ),
+    };
 
     const data = await db.report.create({
       data: {
@@ -70,14 +81,14 @@ app.post("/generate-report", upload.none(), async (req, res) => {
       },
     });
 
-    console.log(JSON.stringify(data, null, 2));
-
     if (!data)
       return res
         .status(500)
         .send({ error: "Não foi possivel salvar no banco de dados" });
 
-    let report;
+    res.status(200).send({ message: "Relatorio gerado com sucesso!" });
+
+    let report: Awaited<ReturnType<typeof createDailyReport>>;
 
     switch (data.type) {
       case "daily":
@@ -87,13 +98,9 @@ app.post("/generate-report", upload.none(), async (req, res) => {
         });
         break;
       default:
-        return res
-          .status(400)
-          .send({ error: "Tipo de relatório não suportado." });
+        return;
     }
-
-    console.log("Relatório gerado com sucesso. Enviando resposta...");
-
+    /*
     res.setHeader("Content-Type", "multipart/form-data; boundary=boundary");
 
     const responseParts = [
@@ -111,15 +118,86 @@ app.post("/generate-report", upload.none(), async (req, res) => {
     ];
 
     const responseBody = responseParts.join("\r\n");
+
     res.status(200).send(Buffer.from(responseBody));
+    */
+    const reportDate = req.body.reportDate;
+    await sendReportByEmail(report.html.content, reportDate, [
+      ...report.html.attachments,
+      {
+        filename: "relatorio.pdf",
+        content: report.pdf,
+      },
+    ]);
+
+    return;
   } catch (error) {
-    console.error("Erro ao gerar relatório:", error);
-    res.status(500).send({ error: "Falha ao gerar o relatorio." });
+    if (error instanceof ZodError) {
+      console.error("Erro de validação:", error.format());
+
+      return res.status(400).json({
+        error: "Dados invalidos",
+        content: error.format(),
+      });
+    }
+    console.error("Erro no processo:", error);
+    res
+      .status(500)
+      .send({ error: "Algo deu errado. Se persistir contante o suporte." });
   }
 });
 
-app.get("/conversations/:id", (req, res) => {
-  res.status(200).send({ message: "Funcionando" });
+app.get("/conversations/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const conversationId = parseInt(id, 10);
+
+    if (isNaN(conversationId)) {
+      return res.status(400).send("O ID da conversa deve ser um número.");
+    }
+
+    const conversation = await db.conversationAnalysis.findUnique({
+      where: { id: conversationId },
+      include: {
+        ai: {
+          include: {
+            resumoExecutivo: true,
+          },
+        },
+      },
+    });
+
+    if (!conversation) {
+      return res
+        .status(404)
+        .render("error", { message: "Análise de Conversa não encontrada" });
+    }
+
+    const getClassificationClass = (
+      classification: string | null | undefined
+    ) => {
+      switch (classification) {
+        case "excelente":
+          return "status-excelente";
+        case "bom":
+          return "status-bom";
+        case "regular":
+          return "status-regular";
+        case "fraco":
+          return "status-fraco";
+        default:
+          return "status-default";
+      }
+    };
+
+    res.render("conversation", {
+      conversation,
+      getClassificationClass,
+    });
+  } catch (error) {
+    console.error("Erro ao buscar a conversa:", error);
+    res.status(500).render("error", { message: "Erro interno no servidor" });
+  }
 });
 
 app.listen(port, () => {

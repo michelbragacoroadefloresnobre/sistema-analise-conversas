@@ -1,7 +1,7 @@
-import { getDailyReportHtml } from "../templates/dailyReportTemplate";
 import { generateBarChart } from "./chartGenerator";
 import { FinalReport } from "./inputParser";
 import { generatePdfFromHtml } from "./pdfGenerator";
+import { getDailyReportHtml } from "./templateGenerator";
 
 export async function createDailyReport(
   reportData: FinalReport & { metadata: { reportDate: string; type: string } }
@@ -13,9 +13,9 @@ export async function createDailyReport(
 
   const barChartImage = await generateBarChart(topFuncionariosData);
 
-  const html = getDailyReportHtml(reportData, barChartImage);
+  const html = await getDailyReportHtml(reportData, barChartImage);
 
-  const pdf = await generatePdfFromHtml(html);
+  const pdf = await generatePdfFromHtml(html.forPdf);
 
-  return { html, pdf };
+  return { html: html.forEmail, pdf };
 }
