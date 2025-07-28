@@ -21,7 +21,8 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
       h1,
-      h2 {
+      h2,
+      h3 {
         color: #2c3e50;
         border-bottom: 2px solid #e0e0e0;
         padding-bottom: 10px;
@@ -32,6 +33,11 @@
       h2 {
         font-size: 1.5em;
         margin-top: 2rem;
+      }
+      h3 {
+        font-size: 1.2em;
+        margin-top: 1.5rem;
+        border-bottom-width: 1px;
       }
       .card {
         background-color: #fdfdfd;
@@ -81,6 +87,21 @@
       li {
         margin-bottom: 8px;
       }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
     </style>
   </head>
   <body>
@@ -94,6 +115,9 @@
           <div><strong>Protocolo:</strong> <%= conversation.protocol %></div>
           <div><strong>Cliente:</strong> <%= conversation.customerName %></div>
           <div>
+            <strong>ID do Cliente:</strong> <%= conversation.customerId %>
+          </div>
+          <div>
             <strong>Atendente:</strong> <%= conversation.employeeName %>
           </div>
         </div>
@@ -106,12 +130,16 @@
           <span
             class="status-badge <%= getClassificationClass(conversation.ai.resumoExecutivo.classificacao) %>"
           >
-            <%= conversation.ai.resumoExecutivo.classificacao %>
+            <%= conversation.ai.resumoExecutivo.classificacao || 'N/A' %>
           </span>
         </p>
         <p>
           <strong>Tipo de Atendimento:</strong> <%=
           conversation.ai.resumoExecutivo.tipoAtendimento %>
+        </p>
+        <p>
+          <strong>Houve Venda:</strong> <%=
+          conversation.ai.resumoExecutivo.houveVenda ? 'Sim' : 'Não' %>
         </p>
         <p>
           <strong>Ponto Alto:</strong> <%=
@@ -127,12 +155,12 @@
       <div class="card">
         <div class="grid">
           <div>
-            <strong>Nota de Venda:</strong> <%= conversation.ai.notaVenda %> /
-            10
+            <strong>Nota de Venda:</strong> <%= conversation.ai.notaVenda !==
+            null ? `${conversation.ai.notaVenda} / 10` : 'N/A' %>
           </div>
           <div>
             <strong>Nota de Pós-Venda:</strong> <%= conversation.ai.notaPosVenda
-            %> / 10
+            !== null ? `${conversation.ai.notaPosVenda} / 10` : 'N/A' %>
           </div>
         </div>
       </div>
@@ -145,22 +173,34 @@
           <strong>Pós-Venda:</strong> <%= conversation.ai.justificativaPosVenda
           %>
         </p>
-        <hr />
+
         <h3>Percepção do Cliente</h3>
         <p>
           <strong>Como o cliente provavelmente se sentiu:</strong> <%=
           conversation.ai.sensacaoCliente %>
         </p>
-        <hr />
-        <h3>Oportunidades Não Aproveitadas</h3>
-        <% if (conversation.ai.oportunidadesNaoAproveitadas.length > 0) { %>
-        <ul>
-          <% conversation.ai.oportunidadesNaoAproveitadas.forEach(op => { %>
-          <li><%= op %></li>
-          <% }); %>
-        </ul>
-        <% } else { %>
-        <p>Nenhuma oportunidade perdida foi identificada.</p>
+
+        <% if (conversation.ai.criteriosFaltantes &&
+        conversation.ai.criteriosFaltantes.length > 0) { %>
+        <h3>Critérios Faltantes na Venda</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Critério</th>
+              <th>Impacto na Nota</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% conversation.ai.criteriosFaltantes.forEach(criterio => { %>
+            <tr>
+              <td><%= criterio.criterio %></td>
+              <td style="text-align: center; font-weight: bold">
+                <%= criterio.nota %>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
         <% } %>
       </div>
 

@@ -11,14 +11,12 @@ type ConversationAnalysis = Prisma.ConversationAnalysisGetPayload<{
 }>;
 
 export function inputParser(conversations: ConversationAnalysis[]) {
-  const aiAnalyse = conversations.map((c) => c.ai);
-
   const totalConversations = conversations.length;
-  const finalScore = aiAnalyse.map((c) => c!.notaVenda);
 
+  const finalScores = conversations.map((c) => c.ai?.notaVenda ?? 0);
   const averageScore =
-    finalScore.length > 0
-      ? (finalScore.reduce((a, b) => a + b, 0) / finalScore.length).toFixed(1)
+    finalScores.length > 0
+      ? (finalScores.reduce((a, b) => a + b, 0) / finalScores.length).toFixed(2)
       : "N/A";
 
   const averageTimeToRespond = "N/A";
@@ -26,19 +24,20 @@ export function inputParser(conversations: ConversationAnalysis[]) {
 
   const attendantStatsMap = new Map<
     string,
-    { totalScore: number; count: number }
+    { totalScore: number; count: number; saleConversations: number }
   >();
 
   conversations.forEach((convo) => {
-    // Trata casos de múltiplos atendentes na mesma conversa (ex: "Nome1 + Nome2")
     const attendants = convo.employeeName.split(" + ");
     attendants.forEach((name) => {
       const trimmedName = name.trim();
       const stats = attendantStatsMap.get(trimmedName) ?? {
         totalScore: 0,
         count: 0,
+        saleConversations: 0,
       };
-      stats.totalScore += convo!.ai!.notaVenda;
+      stats.totalScore += convo.ai!.notaVenda!;
+      stats.saleConversations += convo.ai?.resumoExecutivo?.houveVenda ? 1 : 0;
       stats.count += 1;
       attendantStatsMap.set(trimmedName, stats);
     });
@@ -48,38 +47,53 @@ export function inputParser(conversations: ConversationAnalysis[]) {
     ([name, stats]) => ({
       nome: name,
       notaMedia: stats.totalScore / stats.count,
+      totalConversas: stats.count,
+      conversasComVenda: stats.saleConversations,
     })
   );
 
-  // 3. Classificar Atendentes
   rankedAttendants.sort((a, b) => b.notaMedia - a.notaMedia);
 
-  const bestAttendants = rankedAttendants.slice(0, 3);
-  const worstAttendants = [...rankedAttendants].reverse().slice(0, 3);
+  conversations.sort((a, b) => b.ai!.notaVenda! - a!.ai!.notaVenda!);
 
-  const rankedConversations = conversations.sort(
-    (a, b) => b!.ai!.notaVenda - a!.ai!.notaVenda
+  const bestConversations = conversations.slice(0, 20);
+  const worstConversations = [...conversations].reverse().slice(0, 20);
+
+  const conversationsWithoutSale = conversations.filter(
+    (c) => !c.ai?.resumoExecutivo?.houveVenda
   );
 
-  const bestConversations = rankedConversations.slice(0, 5);
-  const worstConversations = rankedConversations.reverse().slice(0, 5);
+  const totalConversationsWithoutSale = conversationsWithoutSale.length;
+
+  const conversationsWithoutSaleExamples = conversationsWithoutSale
+    .slice(0, 10)
+    .map((c) => ({
+      id: c.id,
+      employeeName: c.employeeName,
+      customerName: c.customerName,
+      oportunidade:
+        c.ai?.resumoExecutivo?.oportunidade || "Nenhuma observação.",
+    }));
 
   const finalReport = {
     resumoExecutivo: {
       totalConversas: totalConversations,
-      notaMedia: parseFloat(averageScore),
+      notaMedia: averageScore === "N/A" ? 0 : parseFloat(averageScore),
       tempoMedioResposta: averageTimeToRespond,
       taxaResolucao: resolutionTax,
-      comparativoDiaAnterior: "N/A", // Exemplo
+      comparativoDiaAnterior: "N/A",
+      totalConversasSemVenda: totalConversationsWithoutSale,
     },
+    atendentes: rankedAttendants,
     rankings: {
-      topFuncionarios: bestAttendants,
-      atencaoNecessaria: worstAttendants,
+      topFuncionarios: rankedAttendants.slice(0, 5),
+      atencaoNecessaria: [...rankedAttendants].reverse().slice(0, 5),
     },
     conversasDestaque: {
       melhores: bestConversations,
       piores: worstConversations,
     },
+    conversasSemVenda: conversationsWithoutSaleExamples,
   };
 
   return finalReport;

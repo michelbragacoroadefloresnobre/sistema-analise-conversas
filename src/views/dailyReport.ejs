@@ -14,7 +14,6 @@
         color-scheme: light dark;
         supported-color-schemes: light dark;
       }
-
       @media (prefers-color-scheme: dark) {
         body,
         .body-bg {
@@ -40,11 +39,10 @@
         .custom-table th {
           background-color: #333333 !important;
         }
-        .custom-table tr.dark-mode-border {
+        .custom-table tr {
           border-bottom-color: #444 !important;
         }
       }
-
       body {
         margin: 0 !important;
         padding: 0 !important;
@@ -140,7 +138,7 @@
                           text-transform: uppercase;
                         "
                       >
-                        Nota Média
+                        Nota Média (Vendas)
                       </h3>
                       <p
                         style="
@@ -151,7 +149,7 @@
                           font-weight: bold;
                         "
                       >
-                        <%= data.resumoExecutivo.notaMedia.toFixed(2) %>
+                        <%= data.resumoExecutivo.notaMedia %>
                       </p>
                     </td>
                     <td align="center" style="padding: 10px">
@@ -190,18 +188,18 @@
                           text-transform: uppercase;
                         "
                       >
-                        Tempo Médio
+                        Sem Venda
                       </h3>
                       <p
                         style="
                           font-family: Arial, sans-serif;
                           font-size: 36px;
-                          color: #3498db;
+                          color: #e74c3c;
                           margin: 0;
                           font-weight: bold;
                         "
                       >
-                        <%= data.resumoExecutivo.tempoMedioResposta %>
+                        <%= data.resumoExecutivo.totalConversasSemVenda %>
                       </p>
                     </td>
                   </tr>
@@ -221,11 +219,11 @@
                     padding-bottom: 10px;
                   "
                 >
-                  👥 Top Funcionários
+                  👥 Performance dos Atendentes
                 </h2>
                 <img
-                  src="<%= chartImage %>"
-                  alt="Gráfico de Top Funcionários"
+                  src="cid:attendantsChart"
+                  alt="Gráfico de Performance"
                   width="620"
                   style="
                     width: 100%;
@@ -233,29 +231,13 @@
                     height: auto;
                     display: block;
                     border-radius: 8px;
+                    margin-bottom: 20px;
                   "
                 />
-              </td>
-            </tr>
 
-            <tr>
-              <td style="background-color: #ffffff; padding: 30px" class="card">
-                <h2
-                  style="
-                    font-family: Arial, sans-serif;
-                    font-size: 22px;
-                    color: #34495e;
-                    margin: 0 0 20px 0;
-                    border-bottom: 2px solid #ecf0f1;
-                    padding-bottom: 10px;
-                  "
-                >
-                  🚨 Atenção Necessária
-                </h2>
-                <% if (data.rankings.atencaoNecessaria.length > 0) { %>
                 <table border="0" cellpadding="15" cellspacing="0" width="100%">
                   <thead>
-                    <tr>
+                    <tr style="border-bottom: 1px solid #ecf0f1">
                       <th
                         style="
                           font-family: Arial, sans-serif;
@@ -266,7 +248,7 @@
                           background-color: #f8f9fa;
                         "
                       >
-                        Funcionário
+                        Atendente
                       </th>
                       <th
                         style="
@@ -274,53 +256,77 @@
                           color: #7f8c8d;
                           font-size: 12px;
                           text-transform: uppercase;
-                          text-align: left;
+                          text-align: center;
                           background-color: #f8f9fa;
                         "
                       >
                         Nota Média
                       </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: center;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Total Conv.
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: center;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Vendas
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <% data.rankings.atencaoNecessaria.forEach(f => { %>
-                    <tr
-                      class="dark-mode-border"
-                      style="border-bottom: 1px solid #ecf0f1"
-                    >
+                    <% data.atendentes.forEach(f => { %>
+                    <tr style="border-bottom: 1px solid #ecf0f1">
                       <td
                         style="
                           font-family: Arial, sans-serif;
-                          color: #e74c3c;
+                          color: #34495e;
                           font-weight: bold;
                         "
                       >
                         <%= f.nome %>
                       </td>
                       <td
-                        style="
-                          font-family: Arial, sans-serif;
-                          color: #e74c3c;
-                          font-weight: bold;
-                        "
+                        style="font-family: Arial, sans-serif; color: <%= f.notaMedia < 7 ? '#e74c3c' : '#27ae60' %>; font-weight: bold; text-align: center;"
                       >
                         <%= f.notaMedia.toFixed(2) %>
+                      </td>
+                      <td
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #34495e;
+                          text-align: center;
+                        "
+                      >
+                        <%= f.totalConversas %>
+                      </td>
+                      <td
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #34495e;
+                          text-align: center;
+                        "
+                      >
+                        <%= f.conversasComVenda %>
                       </td>
                     </tr>
                     <% }); %>
                   </tbody>
                 </table>
-                <% } else { %>
-                <p
-                  style="
-                    font-family: Arial, sans-serif;
-                    color: #34495e;
-                    text-align: center;
-                  "
-                >
-                  Nenhum funcionário com nota abaixo do esperado hoje! 🎉
-                </p>
-                <% } %>
               </td>
             </tr>
 
@@ -336,11 +342,12 @@
                     padding-bottom: 10px;
                   "
                 >
-                  ⭐ Melhores Conversas (Top 5)
+                  ⭐ Melhores Conversas
                 </h2>
+                <% if (data.conversasDestaque.melhores.length > 0) { %>
                 <table border="0" cellpadding="15" cellspacing="0" width="100%">
                   <thead>
-                    <tr>
+                    <tr style="border-bottom: 1px solid #ecf0f1">
                       <th
                         style="
                           font-family: Arial, sans-serif;
@@ -351,7 +358,7 @@
                           background-color: #f8f9fa;
                         "
                       >
-                        Funcionário
+                        Atendente
                       </th>
                       <th
                         style="
@@ -371,7 +378,7 @@
                           color: #7f8c8d;
                           font-size: 12px;
                           text-transform: uppercase;
-                          text-align: left;
+                          text-align: center;
                           background-color: #f8f9fa;
                         "
                       >
@@ -393,10 +400,7 @@
                   </thead>
                   <tbody>
                     <% data.conversasDestaque.melhores.forEach(c => { %>
-                    <tr
-                      class="dark-mode-border"
-                      style="border-bottom: 1px solid #ecf0f1"
-                    >
+                    <tr style="border-bottom: 1px solid #ecf0f1">
                       <td
                         style="font-family: Arial, sans-serif; color: #34495e"
                       >
@@ -410,8 +414,9 @@
                       <td
                         style="
                           font-family: Arial, sans-serif;
-                          color: #27ae60;
                           font-weight: bold;
+                          text-align: center;
+                          color: #27ae60;
                         "
                       >
                         <%= c.ai.notaVenda.toFixed(2) %>
@@ -432,8 +437,143 @@
                     <% }); %>
                   </tbody>
                 </table>
+                <% } else { %>
+                <p
+                  style="
+                    font-family: Arial, sans-serif;
+                    color: #34495e;
+                    text-align: center;
+                    padding-top: 15px;
+                  "
+                >
+                  Nenhuma conversa com venda para exibir.
+                </p>
+                <% } %>
               </td>
             </tr>
+
+            <tr>
+              <td style="background-color: #ffffff; padding: 30px" class="card">
+                <h2
+                  style="
+                    font-family: Arial, sans-serif;
+                    font-size: 22px;
+                    color: #34495e;
+                    margin: 0 0 20px 0;
+                    border-bottom: 2px solid #ecf0f1;
+                    padding-bottom: 10px;
+                  "
+                >
+                  ⚠️ Piores Conversas
+                </h2>
+                <% if (data.conversasDestaque.piores.length > 0) { %>
+                <table border="0" cellpadding="15" cellspacing="0" width="100%">
+                  <thead>
+                    <tr style="border-bottom: 1px solid #ecf0f1">
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Atendente
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: left;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Cliente
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: center;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Nota
+                      </th>
+                      <th
+                        style="
+                          font-family: Arial, sans-serif;
+                          color: #7f8c8d;
+                          font-size: 12px;
+                          text-transform: uppercase;
+                          text-align: center;
+                          background-color: #f8f9fa;
+                        "
+                      >
+                        Ações
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% data.conversasDestaque.piores.forEach(c => { %>
+                    <tr style="border-bottom: 1px solid #ecf0f1">
+                      <td
+                        style="font-family: Arial, sans-serif; color: #34495e"
+                      >
+                        <%= c.employeeName %>
+                      </td>
+                      <td
+                        style="font-family: Arial, sans-serif; color: #34495e"
+                      >
+                        <%= c.customerName %>
+                      </td>
+                      <td
+                        style="
+                          font-family: Arial, sans-serif;
+                          font-weight: bold;
+                          text-align: center;
+                          color: #e74c3c;
+                        "
+                      >
+                        <%= c.ai.notaVenda.toFixed(2) %>
+                      </td>
+                      <td align="center">
+                        <a
+                          href="<%= websiteUrl %>/conversations/<%= c.id %>"
+                          target="_blank"
+                          style="
+                            color: #3498db;
+                            text-decoration: none;
+                            font-weight: bold;
+                          "
+                          >Ver</a
+                        >
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+                <% } else { %>
+                <p
+                  style="
+                    font-family: Arial, sans-serif;
+                    color: #34495e;
+                    text-align: center;
+                    padding-top: 15px;
+                  "
+                >
+                  Nenhuma conversa com venda para exibir.
+                </p>
+                <% } %>
+              </td>
+            </tr>
+
             <tr>
               <td
                 style="
@@ -453,11 +593,12 @@
                     padding-bottom: 10px;
                   "
                 >
-                  ⚠️ Piores Conversas (Top 5)
+                  🔍 Oportunidades de Venda Perdidas
                 </h2>
+                <% if (data.conversasSemVenda.length > 0) { %>
                 <table border="0" cellpadding="15" cellspacing="0" width="100%">
                   <thead>
-                    <tr>
+                    <tr style="border-bottom: 1px solid #ecf0f1">
                       <th
                         style="
                           font-family: Arial, sans-serif;
@@ -468,7 +609,7 @@
                           background-color: #f8f9fa;
                         "
                       >
-                        Funcionário
+                        Atendente
                       </th>
                       <th
                         style="
@@ -492,7 +633,7 @@
                           background-color: #f8f9fa;
                         "
                       >
-                        Nota
+                        Observação da IA
                       </th>
                       <th
                         style="
@@ -509,11 +650,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% data.conversasDestaque.piores.forEach(c => { %>
-                    <tr
-                      class="dark-mode-border"
-                      style="border-bottom: 1px solid #ecf0f1"
-                    >
+                    <% data.conversasSemVenda.forEach(c => { %>
+                    <tr style="border-bottom: 1px solid #ecf0f1">
                       <td
                         style="font-family: Arial, sans-serif; color: #34495e"
                       >
@@ -527,11 +665,11 @@
                       <td
                         style="
                           font-family: Arial, sans-serif;
-                          color: #e74c3c;
-                          font-weight: bold;
+                          color: #34495e;
+                          font-size: 14px;
                         "
                       >
-                        <%= c.ai.notaVenda.toFixed(2) %>
+                        <%= c.oportunidade %>
                       </td>
                       <td align="center">
                         <a
@@ -549,6 +687,18 @@
                     <% }); %>
                   </tbody>
                 </table>
+                <% } else { %>
+                <p
+                  style="
+                    font-family: Arial, sans-serif;
+                    color: #34495e;
+                    text-align: center;
+                    padding-top: 15px;
+                  "
+                >
+                  Todas as conversas analisadas resultaram em venda! 🎉
+                </p>
+                <% } %>
               </td>
             </tr>
 
@@ -561,7 +711,6 @@
                     color: #95a5a6;
                     margin: 0;
                   "
-                  class="footer-text"
                 >
                   Relatório gerado automaticamente pelo Sistema.
                 </p>

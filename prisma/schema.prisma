@@ -47,13 +47,13 @@ model ConversationAnalysis {
 model AiAnalysis {
   id                    Int                  @id @default(autoincrement())
   contextoIdentificado  ContextoIdentificado
-  notaVenda             Int
-  notaPosVenda          Int
+  notaVenda             Float
+  notaPosVenda          Float
   justificativaVenda    String               @db.Text
   justificativaPosVenda String               @db.Text
   sensacaoCliente       String               @db.Text
 
-  oportunidadesNaoAproveitadas String[]
+  criteriosFaltantes CriterioFaltante[]
 
   resumoExecutivo ResumoExecutivo?
 
@@ -61,9 +61,18 @@ model AiAnalysis {
   conversationAnalysis   ConversationAnalysis @relation(fields: [conversationAnalysisId], references: [id], onDelete: Cascade)
 }
 
+model CriterioFaltante {
+  id           Int        @id @default(autoincrement())
+  criterio     String     @db.Text
+  nota         Float
+  AiAnalysis   AiAnalysis @relation(fields: [aiAnalysisId], references: [id])
+  aiAnalysisId Int
+}
+
 model ResumoExecutivo {
   id              Int           @id @default(autoincrement())
   tipoAtendimento String
+  houveVenda      Boolean
   pontoAlto       String        @db.Text
   oportunidade    String        @db.Text
   classificacao   Classificacao

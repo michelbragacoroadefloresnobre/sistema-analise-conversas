@@ -4,18 +4,20 @@ const ResumoExecutivoSchema = z.object({
   tipoAtendimento: z.string({
     required_error: "O campo 'tipoAtendimento' é obrigatório.",
   }),
+  houveVenda: z.boolean({
+    required_error: "O campo 'houveVenda' é obrigatorio",
+  }),
   pontoAlto: z.string({
     required_error: "O campo 'pontoAlto' é obrigatório.",
   }),
   oportunidade: z.string({
     required_error: "O campo 'oportunidade' é obrigatório.",
   }),
-  classificacao: z.enum(
-    ["excelente", "bom", "regular", "fraco", "nao_aplicavel"],
-    {
+  classificacao: z
+    .enum(["excelente", "bom", "regular", "fraco"], {
       required_error: "O campo 'classificacao' é obrigatório.",
-    }
-  ),
+    })
+    .nullable(),
 });
 
 const AiAnalysisSchema = z.object({
@@ -25,25 +27,21 @@ const AiAnalysisSchema = z.object({
       required_error: "O campo 'contextoIdentificado' é obrigatório.",
     }
   ),
-  notaVenda: z
-    .number({
-      required_error: "O campo 'notaVenda' é obrigatório.",
-    })
-    .int(),
+  notaVenda: z.number({}).nullish(),
   justificativaVenda: z.string({
     required_error: "O campo 'justificativaVenda' é obrigatório.",
   }),
-  notaPosVenda: z
-    .number({
-      required_error: "O campo 'notaPosVenda' é obrigatório.",
-    })
-    .int(),
-  justificativaPosVenda: z.string({
-    required_error: "O campo 'justificativaPosVenda' é obrigatório.",
-  }),
-  oportunidadesNaoAproveitadas: z.array(z.string(), {
-    required_error: "O campo 'oportunidadesNaoAproveitadas' é obrigatório.",
-  }),
+  notaPosVenda: z.number({}).nullish(),
+  justificativaPosVenda: z.string({}).nullish(),
+  criteriosFaltantes: z.array(
+    z.object({
+      criterio: z.string(),
+      nota: z.number(),
+    }),
+    {
+      required_error: "O campo 'critérios' é obrigatório.",
+    }
+  ),
   sensacaoCliente: z.string({
     required_error: "O campo 'sensacaoCliente' é obrigatório.",
   }),

@@ -1,14 +1,17 @@
 import express from "express";
-import path from "path";
 import { ZodError } from "zod";
 import { db } from "./db";
 import { inputParser } from "./services/inputParser";
 import { createDailyReport } from "./services/reportService";
 import { sendReportByEmail } from "./services/sendReportService";
-import { ReportSchema } from "./validators";
 import { getView } from "./utils";
+import { ReportSchema } from "./validators";
+import { wClient } from "./lib/whatsapp";
+import { MessageMedia } from "whatsapp-web.js";
+import { readFile, writeFile } from "fs/promises";
 
 const app = express();
+
 const port = process.env.PORT || 3000;
 
 app.use(express.json({ limit: "50mb" }));
@@ -27,8 +30,8 @@ app.post("/reports", async (req, res) => {
       ...body,
       data: body.data.filter(
         (r) =>
-          r.status === "analisado" &&
-          r.ai.resumoExecutivo.tipoAtendimento !== "telefone"
+          r.status.toLowerCase() === "analisado" &&
+          r.ai.resumoExecutivo.tipoAtendimento.toLowerCase() !== "telefone"
       ),
     };
 
@@ -46,19 +49,23 @@ app.post("/reports", async (req, res) => {
               ai: {
                 create: {
                   contextoIdentificado: c.ai.contextoIdentificado,
-                  notaVenda: c.ai.notaVenda,
+                  notaVenda: c.ai.notaVenda || 0,
                   justificativaVenda: c.ai.justificativaVenda,
-                  notaPosVenda: c.ai.notaPosVenda,
-                  justificativaPosVenda: c.ai.justificativaPosVenda,
+                  notaPosVenda: c.ai.notaPosVenda || 0,
+                  justificativaPosVenda:
+                    c.ai.justificativaPosVenda || "indisponivel",
                   sensacaoCliente: c.ai.sensacaoCliente,
-                  oportunidadesNaoAproveitadas:
-                    c.ai.oportunidadesNaoAproveitadas,
+                  criteriosFaltantes: {
+                    create: c.ai.criteriosFaltantes,
+                  },
                   resumoExecutivo: {
                     create: {
                       tipoAtendimento: c.ai.resumoExecutivo.tipoAtendimento,
+                      houveVenda: c.ai.resumoExecutivo.houveVenda,
                       oportunidade: c.ai.resumoExecutivo.oportunidade,
                       pontoAlto: c.ai.resumoExecutivo.pontoAlto,
-                      classificacao: c.ai.resumoExecutivo.classificacao,
+                      classificacao:
+                        c.ai.resumoExecutivo.classificacao || "nao_aplicavel",
                     },
                   },
                 },
@@ -72,6 +79,7 @@ app.post("/reports", async (req, res) => {
           include: {
             ai: {
               include: {
+                criteriosFaltantes: true,
                 resumoExecutivo: true,
               },
             },
@@ -85,8 +93,6 @@ app.post("/reports", async (req, res) => {
         .status(500)
         .send({ error: "Não foi possivel salvar no banco de dados" });
 
-    res.status(200).send({ message: "Relatorio gerado com sucesso!" });
-
     let report: Awaited<ReturnType<typeof createDailyReport>>;
 
     switch (data.type) {
@@ -99,27 +105,9 @@ app.post("/reports", async (req, res) => {
       default:
         return;
     }
-    /*
-    res.setHeader("Content-Type", "multipart/form-data; boundary=boundary");
 
-    const responseParts = [
-      `--boundary`,
-      `Content-Disposition: form-data; name="html"`,
-      `Content-Type: text/html`,
-      ``,
-      report.html,
-      `--boundary`,
-      `Content-Disposition: form-data; name="pdf"; filename="relatorio.pdf"`,
-      `Content-Type: application/pdf`,
-      ``,
-      report.pdf,
-      `--boundary--`,
-    ];
+    res.status(200).send({ message: "Relatorio gerado com sucesso!" });
 
-    const responseBody = responseParts.join("\r\n");
-
-    res.status(200).send(Buffer.from(responseBody));
-    */
     const reportDate = req.body.reportDate;
     await sendReportByEmail(report.html.content, reportDate, [
       ...report.html.attachments,
@@ -128,6 +116,20 @@ app.post("/reports", async (req, res) => {
         content: report.pdf,
       },
     ]);
+
+    await writeFile("./.temp_file.pdf", report.pdf);
+
+    const mediaBase64 = await readFile("./.temp_file.pdf", {
+      encoding: "base64",
+    });
+    await wClient.sendMessage(
+      "5511910394565@c.us",
+      new MessageMedia("application/pdf", mediaBase64, "relatorio.pdf"),
+      {
+        caption: `Relatório Diario ${reportDate}`,
+        sendMediaAsDocument: true,
+      }
+    );
 
     return;
   } catch (error) {
@@ -140,9 +142,7 @@ app.post("/reports", async (req, res) => {
       });
     }
     console.error("Erro no processo:", error);
-    res
-      .status(500)
-      .send({ error: "Algo deu errado. Se persistir contante o suporte." });
+    // res.status(500).send({ error: "Algo deu errado. Se persistir contante o suporte." });
   }
 });
 
@@ -202,3 +202,5 @@ app.get("/conversations/:id", async (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor de relatórios rodando na porta ${port}`);
 });
+
+wClient.initialize();
