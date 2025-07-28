@@ -116,7 +116,7 @@ O servidor estará rodando no endereço `http://localhost:PORT`, onde `PORT` é 
 ## 🔗 Endpoints da API
 
 - `POST /reports`
-  - Recebe o JSON da análise de conversas (geralmente enviado pelo N8N) e o relatorio envia para o email dos colaboradores.
+  - Recebe o JSON da análise de conversas (geralmente enviado pelo N8N), gera o relatório e envia para o email dos colaboradores.
 - `GET /conversations/:id`
   - Retorna uma página HTML com a análise detalhada de uma conversa específica, buscando pelo seu ID no banco de dados.
 - `GET /resports?type=daily`
