@@ -153,8 +153,8 @@
           conversation.ai.resumoExecutivo.tipoAtendimento %>
         </p>
         <p>
-          <strong>Houve Venda:</strong> <%=
-          conversation.ai.resumoExecutivo.houveVenda ? 'Sim' : 'Não' %>
+          <strong>Houve Venda:</strong> <%= conversation.hasSale ? 'Sim' : 'Não'
+          %>
         </p>
         <p>
           <strong>Ponto Alto:</strong> <%=

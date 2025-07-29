@@ -4,20 +4,15 @@ const ResumoExecutivoSchema = z.object({
   tipoAtendimento: z.string({
     required_error: "O campo 'tipoAtendimento' é obrigatório.",
   }),
-  houveVenda: z.boolean({
-    required_error: "O campo 'houveVenda' é obrigatorio",
-  }),
   pontoAlto: z.string({
     required_error: "O campo 'pontoAlto' é obrigatório.",
   }),
   oportunidade: z.string({
     required_error: "O campo 'oportunidade' é obrigatório.",
   }),
-  classificacao: z
-    .enum(["excelente", "bom", "regular", "fraco"], {
-      required_error: "O campo 'classificacao' é obrigatório.",
-    })
-    .nullable(),
+  classificacao: z.enum(["excelente", "bom", "regular", "fraco"], {
+    required_error: "O campo 'classificacao' é obrigatório.",
+  }),
 });
 
 const AiAnalysisSchema = z.object({
@@ -27,7 +22,7 @@ const AiAnalysisSchema = z.object({
       required_error: "O campo 'contextoIdentificado' é obrigatório.",
     }
   ),
-  notaVenda: z.number({}).nullish(),
+  notaVenda: z.number().nullish(),
   justificativaVenda: z.string({
     required_error: "O campo 'justificativaVenda' é obrigatório.",
   }),
@@ -54,6 +49,7 @@ const ConversationAnalysisSchema = z.object({
   employeeName: z.string(),
   protocol: z.string(),
   status: z.string(),
+  hasSale: z.boolean(),
   ai: AiAnalysisSchema,
 });
 

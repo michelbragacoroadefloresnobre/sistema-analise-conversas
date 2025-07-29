@@ -47,6 +47,7 @@ app.post("/reports", async (req, res) => {
               customerName: c.customerName,
               employeeName: c.employeeName,
               protocol: c.protocol,
+              hasSale: c.hasSale,
               ai: {
                 create: {
                   contextoIdentificado: c.ai.contextoIdentificado,
@@ -54,7 +55,7 @@ app.post("/reports", async (req, res) => {
                   justificativaVenda: c.ai.justificativaVenda,
                   notaPosVenda: c.ai.notaPosVenda || 0,
                   justificativaPosVenda:
-                    c.ai.justificativaPosVenda || "indisponivel",
+                    c.ai.justificativaPosVenda || "nao_aplicavel",
                   sensacaoCliente: c.ai.sensacaoCliente,
                   criteriosFaltantes: {
                     create: c.ai.criteriosFaltantes,
@@ -62,7 +63,6 @@ app.post("/reports", async (req, res) => {
                   resumoExecutivo: {
                     create: {
                       tipoAtendimento: c.ai.resumoExecutivo.tipoAtendimento,
-                      houveVenda: c.ai.resumoExecutivo.houveVenda,
                       oportunidade: c.ai.resumoExecutivo.oportunidade,
                       pontoAlto: c.ai.resumoExecutivo.pontoAlto,
                       classificacao:
@@ -159,6 +159,7 @@ app.get("/conversations/:id", async (req, res) => {
         ai: {
           include: {
             resumoExecutivo: true,
+            criteriosFaltantes: true,
           },
         },
       },

@@ -32,11 +32,12 @@ model Report {
 }
 
 model ConversationAnalysis {
-  id           Int    @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   customerId   String
   customerName String
   employeeName String
   protocol     String
+  hasSale      Boolean
 
   ai AiAnalysis?
 
@@ -72,7 +73,6 @@ model CriterioFaltante {
 model ResumoExecutivo {
   id              Int           @id @default(autoincrement())
   tipoAtendimento String
-  houveVenda      Boolean
   pontoAlto       String        @db.Text
   oportunidade    String        @db.Text
   classificacao   Classificacao

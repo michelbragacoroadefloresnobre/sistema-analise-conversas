@@ -5,6 +5,7 @@ type ConversationAnalysis = Prisma.ConversationAnalysisGetPayload<{
     ai: {
       include: {
         resumoExecutivo: true;
+        criteriosFaltantes: true;
       };
     };
   };
@@ -37,7 +38,7 @@ export function inputParser(conversations: ConversationAnalysis[]) {
         saleConversations: 0,
       };
       stats.totalScore += convo.ai!.notaVenda!;
-      stats.saleConversations += convo.ai?.resumoExecutivo?.houveVenda ? 1 : 0;
+      stats.saleConversations += convo.hasSale ? 1 : 0;
       stats.count += 1;
       attendantStatsMap.set(trimmedName, stats);
     });
@@ -59,9 +60,7 @@ export function inputParser(conversations: ConversationAnalysis[]) {
   const bestConversations = conversations.slice(0, 20);
   const worstConversations = [...conversations].reverse().slice(0, 20);
 
-  const conversationsWithoutSale = conversations.filter(
-    (c) => !c.ai?.resumoExecutivo?.houveVenda
-  );
+  const conversationsWithoutSale = conversations.filter((c) => !c.hasSale);
 
   const totalConversationsWithoutSale = conversationsWithoutSale.length;
 

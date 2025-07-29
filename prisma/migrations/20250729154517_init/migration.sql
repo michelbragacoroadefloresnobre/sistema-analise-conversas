@@ -7,7 +7,7 @@ CREATE TYPE "Classificacao" AS ENUM ('excelente', 'bom', 'regular', 'fraco', 'na
 -- CreateTable
 CREATE TABLE "Report" (
     "id" SERIAL NOT NULL,
-    "reportDate" DATE NOT NULL,
+    "reportDate" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -21,6 +21,7 @@ CREATE TABLE "ConversationAnalysis" (
     "customerName" TEXT NOT NULL,
     "employeeName" TEXT NOT NULL,
     "protocol" TEXT NOT NULL,
+    "hasSale" BOOLEAN NOT NULL,
     "reportId" INTEGER NOT NULL,
 
     CONSTRAINT "ConversationAnalysis_pkey" PRIMARY KEY ("id")
@@ -30,15 +31,24 @@ CREATE TABLE "ConversationAnalysis" (
 CREATE TABLE "AiAnalysis" (
     "id" SERIAL NOT NULL,
     "contextoIdentificado" "ContextoIdentificado" NOT NULL,
-    "notaVenda" INTEGER NOT NULL,
-    "notaPosVenda" INTEGER NOT NULL,
+    "notaVenda" DOUBLE PRECISION NOT NULL,
+    "notaPosVenda" DOUBLE PRECISION NOT NULL,
     "justificativaVenda" TEXT NOT NULL,
     "justificativaPosVenda" TEXT NOT NULL,
     "sensacaoCliente" TEXT NOT NULL,
-    "oportunidadesNaoAproveitadas" TEXT[],
     "conversationAnalysisId" INTEGER NOT NULL,
 
     CONSTRAINT "AiAnalysis_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CriterioFaltante" (
+    "id" SERIAL NOT NULL,
+    "criterio" TEXT NOT NULL,
+    "nota" DOUBLE PRECISION NOT NULL,
+    "aiAnalysisId" INTEGER NOT NULL,
+
+    CONSTRAINT "CriterioFaltante_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -64,6 +74,9 @@ ALTER TABLE "ConversationAnalysis" ADD CONSTRAINT "ConversationAnalysis_reportId
 
 -- AddForeignKey
 ALTER TABLE "AiAnalysis" ADD CONSTRAINT "AiAnalysis_conversationAnalysisId_fkey" FOREIGN KEY ("conversationAnalysisId") REFERENCES "ConversationAnalysis"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CriterioFaltante" ADD CONSTRAINT "CriterioFaltante_aiAnalysisId_fkey" FOREIGN KEY ("aiAnalysisId") REFERENCES "AiAnalysis"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ResumoExecutivo" ADD CONSTRAINT "ResumoExecutivo_aiAnalysisId_fkey" FOREIGN KEY ("aiAnalysisId") REFERENCES "AiAnalysis"("id") ON DELETE CASCADE ON UPDATE CASCADE;
