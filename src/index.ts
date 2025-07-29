@@ -9,6 +9,7 @@ import { ReportSchema } from "./validators";
 import { wClient } from "./lib/whatsapp";
 import { MessageMedia } from "whatsapp-web.js";
 import { readFile, writeFile } from "fs/promises";
+import { Readable } from "stream";
 
 const app = express();
 
@@ -117,14 +118,11 @@ app.post("/reports", async (req, res) => {
       },
     ]);
 
-    await writeFile("./.temp_file.pdf", report.pdf);
+    const pdfBase64 = Buffer.from(report.pdf).toString("base64");
 
-    const mediaBase64 = await readFile("./.temp_file.pdf", {
-      encoding: "base64",
-    });
     await wClient.sendMessage(
       "5511910394565@c.us",
-      new MessageMedia("application/pdf", mediaBase64, "relatorio.pdf"),
+      new MessageMedia("application/pdf", pdfBase64, "relatorio.pdf"),
       {
         caption: `Relatório Diario ${reportDate}`,
         sendMediaAsDocument: true,
